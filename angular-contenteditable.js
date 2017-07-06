@@ -41,7 +41,7 @@ angular.module('contenteditable', [])
             opts.noLineBreaks = false
             opts.stripBr = false
             opts.stripTags = false
-            html2 = html.replace(/<br>$/, '###BR###').replace(/<\S[^><]*>/g, '').replace(/###BR###/g, '<br>')
+            html2 = html.replace(/<div>/g, '\n').replace(/<br>/g, '\n').replace(/<\/div>/g, '').replace(/<\S[^><]*>/g, '').replace(/\n/g, '<br>')
           }
           if (opts.stripBr) {
             html2 = html.replace(/<br>$/, '')
