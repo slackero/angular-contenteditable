@@ -34,23 +34,27 @@ angular.module('contenteditable', [])
       // view -> model
       element.bind('input', function(e) {
         scope.$apply(function() {
-          var html, html2, rerender
-          html = opts.textOnly ? element.text() : element.html()
-          rerender = false
-          if (opts.brLineBreaksOnly) {
-            opts.noLineBreaks = false
-            opts.stripBr = false
-            opts.stripTags = false
-            html2 = html.replace(/<div>/g, '\n').replace(/<br>/g, '\n').replace(/<\/div>/g, '').replace(/<\S[^><]*>/g, '').replace(/\n/g, '<br>')
-          }
-          if (opts.stripBr) {
-            html2 = html.replace(/<br>$/, '')
-          }
-          if (opts.noLineBreaks) {
-            html2 = html.replace(/<div>/g, '').replace(/<br>/g, '').replace(/<\/div>/g, '')
-          }
-          if (opts.stripTags) {
-            html2 = html.replace(/<\S[^><]*>/g, '')
+          var html, html2, rerender = false
+          if (opts.textOnly) {
+            html = element.text()
+            html2 = html.replace(/\n/g, '<br>')
+          } else {
+            html = element.html()
+            if (opts.brLineBreaksOnly) {
+              opts.noLineBreaks = false
+              opts.stripBr = false
+              opts.stripTags = false
+              html2 = html.replace(/<div>/g, '\n').replace(/<br>/g, '\n').replace(/<\/div>/g, '').replace(/<\S[^><]*>/g, '').replace(/\n/g, '<br>')
+            }
+            if (opts.stripBr) {
+              html2 = html.replace(/<br>$/, '')
+            }
+            if (opts.noLineBreaks) {
+              html2 = html.replace(/<div>/g, '').replace(/<br>/g, '').replace(/<\/div>/g, '')
+            }
+            if (opts.stripTags) {
+              html2 = html.replace(/<\S[^><]*>/g, '')
+            }
           }
           if (opts.numbersOnly) {
             html2 = html.replace(/\D/g, '');
