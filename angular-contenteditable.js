@@ -23,7 +23,8 @@ angular.module('contenteditable', [])
         'selectNonEditable',
         'moveCaretToEndOnChange',
         'stripTags',
-        'numbersOnly'
+        'numbersOnly',
+        'textOnly'
       ], function(opt) {
         var o = attrs[opt]
         opts[opt] = o && o !== 'false'
@@ -33,7 +34,7 @@ angular.module('contenteditable', [])
       element.bind('input', function(e) {
         scope.$apply(function() {
           var html, html2, rerender
-          html = element.html()
+          html = opts.textOnly ? element.text() : element.html()
           rerender = false
           if (opts.stripBr) {
             html = html.replace(/<br>$/, '')
