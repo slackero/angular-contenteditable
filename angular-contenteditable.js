@@ -24,7 +24,8 @@ angular.module('contenteditable', [])
         'moveCaretToEndOnChange',
         'stripTags',
         'numbersOnly',
-        'textOnly'
+        'textOnly',
+        'brLineBreaksOnly'
       ], function(opt) {
         var o = attrs[opt]
         opts[opt] = o && o !== 'false'
@@ -36,23 +37,27 @@ angular.module('contenteditable', [])
           var html, html2, rerender
           html = opts.textOnly ? element.text() : element.html()
           rerender = false
+          if (opts.brLineBreaksOnly) {
+            opts.noLineBreaks = false
+            opts.stripBr = false
+            opts.stripTags = false
+            html2 = html.replace(/<br>$/, '###BR###').replace(/<\S[^><]*>/g, '').replace(/###BR###/g, '<br>')
+          }
           if (opts.stripBr) {
-            html = html.replace(/<br>$/, '')
+            html2 = html.replace(/<br>$/, '')
           }
           if (opts.noLineBreaks) {
             html2 = html.replace(/<div>/g, '').replace(/<br>/g, '').replace(/<\/div>/g, '')
-            if (html2 !== html) {
-              rerender = true
-              html = html2
-            }
           }
           if (opts.stripTags) {
-            rerender = true
-            html = html.replace(/<\S[^><]*>/g, '')
+            html2 = html.replace(/<\S[^><]*>/g, '')
           }
           if (opts.numbersOnly) {
-            rerender = true;
-            html = html.replace(/\D/g, '');
+            html2 = html.replace(/\D/g, '');
+          }
+          if (html2 !== html) {
+            rerender = true
+            html = html2
           }
           ngModel.$setViewValue(html)
           if (rerender) {
