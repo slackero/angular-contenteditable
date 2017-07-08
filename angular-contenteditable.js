@@ -40,35 +40,37 @@ angular.module('contenteditable', [])
         scope.$apply(function() {
           var html, html2, rerender = false
           if (opts.textOnly || opts.textAzOnly) {
-            html = element.text()
-            html2 = opts.textAzOnly ? html.replace(/[^a-zA-Z\s]+/g, '') : html
+            html2 = html = element.text()
+            if (opts.textAzOnly) {
+              html2 = html2.replace(/[^a-zA-Z\s]+/g, '')
+            }
             if (!opts.stripBr && !opts.noLineBreaks) {
               html2 = html2.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>')
             } else {
               html2 = html2.replace(/\r\n/g, ' ').replace(/\n/g, ' ')
             }
           } else {
-            html = element.html()
+            html2 = html = element.html()
             if (opts.brLineBreaksOnly) {
               opts.noLineBreaks = false
               opts.stripBr = false
               opts.stripTags = false
-              html2 = html.replace(/<div>/g, '\r\n').replace(/<br>/g, '\r\n').replace(/<\/div>/g, '').replace(/<\S[^><]*>/g, '').replace(/\r\n/g, '<br>')
+              html2 = html2.replace(/<div>/g, '\r\n').replace(/<br>/g, '\r\n').replace(/<\/div>/g, '').replace(/<\S[^><]*>/g, '').replace(/\r\n/g, '<br>')
             }
             if (opts.stripBr) {
-              html2 = html.replace(/<br>$/, '')
+              html2 = html2.replace(/<br>$/, '')
             }
             if (opts.noLineBreaks) {
-              html2 = html.replace(/<div>/g, '').replace(/<br>/g, '').replace(/<\/div>/g, '')
+              html2 = html2.replace(/<div>/g, '').replace(/<br>/g, '').replace(/<\/div>/g, '')
             }
             if (opts.stripTags) {
-              html2 = html.replace(/<\S[^><]*>/g, '')
+              html2 = html2.replace(/<\S[^><]*>/g, '')
             }
           }
           if (opts.numbersOnly) {
             opts.uppercase = false
             opts.lowercase = false
-            html2 = html.replace(/\D/g, '');
+            html2 = html2.replace(/\D/g, '');
           }
           if (opts.maxLength) {
             opts.maxLength = parseInt(opts.maxLength, 10)
@@ -77,9 +79,9 @@ angular.module('contenteditable', [])
             }
           }
           if (opts.uppercase) {
-            html2 = htm2.toUpperCase()
+            html2 = html2.toUpperCase()
           } else if (opts.lowercase) {
-            html2 = htm2.toLowerCase()
+            html2 = html2.toLowerCase()
           }
           if (html2 !== html) {
             rerender = true
