@@ -25,26 +25,35 @@ angular.module('contenteditable', [])
         'stripTags',
         'numbersOnly',
         'textOnly',
-        'brLineBreaksOnly'
+        'brLineBreaksOnly',
+        'maxLength',
+        'textAzOnly',
+        'uppercase',
+        'lowercase'
       ], function(opt) {
         var o = attrs[opt]
-        opts[opt] = o && o !== 'false'
+        opts[opt] = o && o !== 'false' ? (opt === 'maxLength' ? parseInt(o) : true) : false
       })
 
       // view -> model
       element.bind('input', function(e) {
         scope.$apply(function() {
           var html, html2, rerender = false
-          if (opts.textOnly) {
+          if (opts.textOnly || opts.textAzOnly) {
             html = element.text()
-            html2 = (!opts.stripBr && !opts.noLineBreaks) ? html.replace(/\n/g, '<br>') : html.replace(/\n/g, ' ').trim()
+            html2 = opts.textAzOnly ? html.replace(/[^a-zA-Z\s]+/g, '') : html
+            if (!opts.stripBr && !opts.noLineBreaks) {
+              html2 = html2.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>')
+            } else {
+              html2 = html2.replace(/\r\n/g, ' ').replace(/\n/g, ' ')
+            }
           } else {
             html = element.html()
             if (opts.brLineBreaksOnly) {
               opts.noLineBreaks = false
               opts.stripBr = false
               opts.stripTags = false
-              html2 = html.replace(/<div>/g, '\n').replace(/<br>/g, '\n').replace(/<\/div>/g, '').replace(/<\S[^><]*>/g, '').replace(/\n/g, '<br>')
+              html2 = html.replace(/<div>/g, '\r\n').replace(/<br>/g, '\r\n').replace(/<\/div>/g, '').replace(/<\S[^><]*>/g, '').replace(/\r\n/g, '<br>')
             }
             if (opts.stripBr) {
               html2 = html.replace(/<br>$/, '')
@@ -57,7 +66,20 @@ angular.module('contenteditable', [])
             }
           }
           if (opts.numbersOnly) {
+            opts.uppercase = false
+            opts.lowercase = false
             html2 = html.replace(/\D/g, '');
+          }
+          if (opts.maxLength) {
+            opts.maxLength = parseInt(opts.maxLength, 10)
+            if (opts.maxLength > 0 && html2.length > opts.maxLength) {
+              html2 = html2.substr(0, opts.maxLength)
+            }
+          }
+          if (opts.uppercase) {
+            html2 = htm2.toUpperCase()
+          } else if (opts.lowercase) {
+            html2 = htm2.toLowerCase()
           }
           if (html2 !== html) {
             rerender = true
