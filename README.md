@@ -1,7 +1,6 @@
 # angular-contenteditable
 [![Build Status](https://img.shields.io/travis/akatov/angular-contenteditable.svg)](https://travis-ci.org/akatov/angular-contenteditable)
 [![Dependency Status](https://img.shields.io/gemnasium/akatov/angular-contenteditable.svg)](https://gemnasium.com/akatov/angular-contenteditable)
-[![endorse](https://api.coderwall.com/akatov/endorsecount.png)](https://coderwall.com/akatov)
 
 An AngularJS directive to bind html tags with the `contenteditable` attribute to models.
 
@@ -30,6 +29,22 @@ angular.module('myapp', ['contenteditable'])
   </span>
 </div>
 ```
+
+## Options
+
+| Attribute           | value             | Description                            |
+|---------------------|-------------------|----------------------------------------|
+| strip-br            | **false** \| true | remove all `<br>` line breaks          |
+| no-line-breaks      | **false** \| true | remove all line breaks                 |
+| fix-caret           | **false** \| true | use this if your content is reversed   |
+| strip-tags          | **false** \| true | remove all html tags, including `<br>` |
+| numbers-only        | **false** \| true | all non-number chars are removed       |
+| text-only           | **false** \| true | uses `text()` instead `html()`         |
+| br-line-breaks-only | **false** \| true | all non-`<br>` line breaks are removed |
+| max-length          | **false** \| 1…n  | max length of the contenteditable text |
+| text-az-only        | **false** \| true | only a-Z and white spaces are taken    |
+| uppercase           | **false** \| true | convert contenteditable to uppercase   |
+| lowercase           | **false** \| true | convert contenteditable to lowercase   |
 
 ## Notice
 
