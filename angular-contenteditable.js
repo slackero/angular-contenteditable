@@ -21,7 +21,7 @@ angular.module('contenteditable', [])
         'stripBr',
         'noLineBreaks',
         'selectNonEditable',
-        'moveCaretToEndOnChange',
+        'fixCaret',
         'stripTags',
         'numbersOnly',
         'textOnly',
@@ -115,7 +115,7 @@ angular.module('contenteditable', [])
         }
 
         element.html(html)
-        if (opts.moveCaretToEndOnChange) {
+        if (opts.fixCaret) {
           el = element[0]
           range = document.createRange()
           sel = window.getSelection()
